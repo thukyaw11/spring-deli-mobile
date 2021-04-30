@@ -2,7 +2,8 @@
     package="com.example.spring_deli_app">
    <application
         android:label="spring_deli_app"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:requestLegacyExternalStorage="true">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
