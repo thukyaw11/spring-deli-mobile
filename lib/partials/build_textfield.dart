@@ -21,15 +21,16 @@ class BuildTextField extends StatelessWidget {
         controller: textController,
         cursorColor: Colors.black,
         decoration: InputDecoration(
-          labelText: labelText,
-          labelStyle: TextStyle(
-            color: Colors.black,
-          ),
           focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.black, width: 1)),
+              borderSide: BorderSide(color: Colors.transparent)),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(5.0)),
-          ),
+              borderRadius: BorderRadius.circular(4.0),
+              borderSide: BorderSide(color: Colors.transparent)),
+          enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.transparent)),
+          hintText: labelText,
+          fillColor: Colors.black12,
+          filled: true,
         ),
       ),
     );

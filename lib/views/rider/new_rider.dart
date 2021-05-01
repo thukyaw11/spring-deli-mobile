@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:smart_select/smart_select.dart';
 import 'package:spring_deli_app/partials/build_textfield.dart';
 import 'package:spring_deli_app/utils.dart';
 
@@ -45,34 +46,27 @@ class _NewRiderState extends State<NewRider> {
     'Mandalay Township Two',
     'Mandalay Township Three'
   ];
-  String _selectedDivision;
-  String _selectedTownship;
 
-  List<Widget> buildDropdownItem() => divisions
-      .map(
-        (String val) => DropdownMenuItem(
-          child: Text(val),
-          value: val,
-        ),
-      )
-      .toList();
+// simple usage
 
-  void _divisionSelectChanged(String value) {
-    // if (value == 'Yangon') {
-    //   buildTownshipDropdownItem(ygnDivisions);
-    // } else if (value == 'Mandalay') {
-    //   buildTownshipDropdownItem(mdyDivisions);
-    // }
-    setState(() {
-      _selectedDivision = value;
-    });
-  }
+  String divisionValue;
+  List<S2Choice<String>> options = [
+    S2Choice<String>(value: 'Yangon', title: 'Yangon'),
+    S2Choice<String>(value: 'Mandalay', title: 'Mandalay'),
+  ];
 
-  void _townshipSelectChanged(String townshipVal) {
-    setState(() {
-      _selectedTownship = townshipVal;
-    });
-  }
+  List<int> multi_value = [];
+  List<S2Choice<int>> ygnTownships = [
+    S2Choice<int>(value: 1, title: 'Hlaing(လှိုင်)'),
+    S2Choice<int>(value: 2, title: 'Thingangyun(သင်္ဃန်းကျွန်း)'),
+    S2Choice<int>(value: 3, title: 'Yankin(ရန်ကင်း)'),
+  ];
+
+  List<S2Choice<int>> mdyTownships = [
+    S2Choice<int>(value: 1, title: 'Mdy Hlaing(လှိုင်)'),
+    S2Choice<int>(value: 2, title: 'Thingangyun(သင်္ဃန်းကျွန်း)'),
+    S2Choice<int>(value: 3, title: 'Yankin(ရန်ကင်း)'),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -109,20 +103,55 @@ class _NewRiderState extends State<NewRider> {
                   textController: feeController,
                   labelText: feePlaceHolder,
                 ),
-                BuildTextField(
-                  textController: shopNameController,
-                  labelText: shopNamePlaceHolder,
+                SizedBox(
+                  height: 20,
                 ),
-                BuildTextField(
-                  textController: aboutShopController,
-                  labelText: aboutShopPlaceHolder,
-                  isMaxLine: true,
+                Text(
+                  divisionTitle,
+                  style: TextStyle(fontSize: 18),
+                  textAlign: TextAlign.left,
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                      color: Colors.black12,
+                      borderRadius: BorderRadius.circular(4.0)),
+                  child: SmartSelect<String>.single(
+                      title: statePlaceHolder,
+                      value: divisionValue,
+                      choiceItems: options,
+                      onChange: (state) =>
+                          setState(() => divisionValue = state.value)),
+                ),
+                SizedBox(
+                  height: 16,
+                ),
+                if (divisionValue != null)
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Colors.black12,
+                        borderRadius: BorderRadius.circular(4.0)),
+                    child: SmartSelect<int>.multiple(
+                      title: townPlaceHolder,
+                      choiceType: S2ChoiceType.chips,
+                      choiceLayout: S2ChoiceLayout.grid,
+                      value: multi_value,
+                      choiceItems: divisionValue == 'Yangon'
+                          ? ygnTownships
+                          : mdyTownships,
+                      onChange: (state) =>
+                          setState(() => multi_value = state.value),
+                    ),
+                  ),
+                SizedBox(
+                  height: 16,
                 ),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        primary: Theme.of(context).primaryColor),
+                    style: ElevatedButton.styleFrom(primary: Colors.black),
                     onPressed: () => {getImage()},
                     child: Text(
                       photoUploadBtnText,
@@ -132,42 +161,46 @@ class _NewRiderState extends State<NewRider> {
                 Container(
                   child: _image == null
                       ? Text("No image selected")
-                      : Image.file(_image),
+                      : Image.file(
+                          _image,
+                          width: 100,
+                          height: 100,
+                          fit: BoxFit.fill,
+                        ),
                 ),
                 SizedBox(
-                  height: 20,
+                  height: 16,
                 ),
                 Text(
-                  "မိမိပို့ဆောင်နိုင်မည့် မြို့နယ်များကို ၁ ခုချင်းရွေးချယ်ပါ",
+                  shopTitle,
                   style: TextStyle(fontSize: 18),
                   textAlign: TextAlign.left,
                 ),
-                DropdownButton<String>(
-                  isExpanded: true,
-                  items: buildDropdownItem(),
-                  hint: Text("တိုင်းဒေသကြီး"),
-                  value: _selectedDivision,
-                  onChanged: (String value) {
-                    _divisionSelectChanged(value);
-                  },
+                BuildTextField(
+                  textController: shopNameController,
+                  labelText: shopNamePlaceHolder,
                 ),
-                DropdownButton<String>(
-                  isExpanded: true,
-                  hint: Text("မြို့နယ်"),
-                  value: _selectedTownship,
-                  onChanged: (String value) {
-                    _townshipSelectChanged(value);
-                  },
-                  items: [
-                    new DropdownMenuItem(
-                      child: new Text("Abc"),
-                      value: 'hello',
-                    ),
-                    new DropdownMenuItem(
-                      child: new Text("Xyz"),
-                      value: 'hi',
-                    ),
-                  ],
+                BuildTextField(
+                  textController: aboutShopController,
+                  labelText: aboutShopPlaceHolder,
+                  isMaxLine: true,
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(primary: Colors.black),
+                  onPressed: () => {},
+                  child: Text(
+                    addShopBtnText,
+                  ),
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                        primary: Theme.of(context).primaryColor),
+                    onPressed: () => {},
+                    icon: Icon(Icons.done),
+                    label: Text(doneBtnText),
+                  ),
                 ),
               ],
             ),

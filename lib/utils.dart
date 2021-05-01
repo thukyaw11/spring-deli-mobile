@@ -37,7 +37,7 @@ const String townPlaceHolder = 'မြို့နယ်';
 const String shopTitle =
     'မိမိပို့ဆောင်နိုင်မည့် စားသောက်ဆိုင် / ဈေးဆိုင်များကိုရေးထည့်ပါ';
 const String shopNamePlaceHolder = 'ဆိုင်နာမည်';
-const String aboutShopPlaceHolder = 'ဆိုင်အကြောင်း';
-const String shopSmallText = 'လူသိများပါက ဆိုင်အကြောင်းမထည့်လည်းရပါသည်';
+const String aboutShopPlaceHolder =
+    'ဆိုင်အကြောင်း (လူသိများပါက ဆိုင်အကြောင်းမထည့်လည်းရပါသည်)';
 const String addShopBtnText = 'ဆိုင်ထည့်ရန်';
 const String doneBtnText = 'DONE!';
