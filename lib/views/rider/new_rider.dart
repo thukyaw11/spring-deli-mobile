@@ -16,7 +16,6 @@ class _NewRiderState extends State<NewRider> {
 
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.gallery);
-
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
@@ -34,28 +33,17 @@ class _NewRiderState extends State<NewRider> {
   final shopNameController = TextEditingController();
   final aboutShopController = TextEditingController();
 
-  // division select elements
-  final divisions = <String>['Yangon', 'Mandalay'];
-  final ygnDivisions = <String>[
-    'Yangon Township One',
-    'Yangon Township Two',
-    'Yangon Township Three'
-  ];
-  final mdyDivisions = <String>[
-    'Mandalay Township One',
-    'Mandalay Township Two',
-    'Mandalay Township Three'
-  ];
+  //button disable
+  bool _buttonDisable = true;
 
-// simple usage
-
+  // division select
   String divisionValue;
   List<S2Choice<String>> options = [
     S2Choice<String>(value: 'Yangon', title: 'Yangon'),
     S2Choice<String>(value: 'Mandalay', title: 'Mandalay'),
   ];
 
-  List<int> multi_value = [];
+  List<int> multiValue = [];
   List<S2Choice<int>> ygnTownships = [
     S2Choice<int>(value: 1, title: 'Hlaing(လှိုင်)'),
     S2Choice<int>(value: 2, title: 'Thingangyun(သင်္ဃန်းကျွန်း)'),
@@ -68,14 +56,63 @@ class _NewRiderState extends State<NewRider> {
     S2Choice<int>(value: 3, title: 'Yankin(ရန်ကင်း)'),
   ];
 
+  List<Map<String, String>> availableShops = [
+    {'shopTitle': 'Jo Jo', 'shopDescription': 'this is shop des'},
+    {'shopTitle': 'Jo Jo', 'shopDescription': 'this is shop des'},
+    {'shopTitle': 'Jo Jo', 'shopDescription': 'this is shop des'},
+  ];
+
+  void _addShopToList(String shopTitle, [String shopDescription]) {
+    setState(() {
+      availableShops.add({
+        'shopTitle': shopTitle,
+        'shopDescription': shopDescription == null ? '' : shopDescription
+      });
+    });
+    _clearShopNameTextField();
+  }
+
+  void _clearShopNameTextField() {
+    shopNameController.text = '';
+    aboutShopController.text = '';
+  }
+
+  // listen text change event
+  textListener() {
+    if (shopNameController.text.isNotEmpty) {
+      setState(() {
+        _buttonDisable = false;
+      });
+    } else {
+      setState(() {
+        _buttonDisable = true;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    shopNameController.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    shopNameController.addListener(textListener);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgroundColor,
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.all(12.0),
           child: SingleChildScrollView(
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Center(
                   child: Text(
@@ -137,12 +174,12 @@ class _NewRiderState extends State<NewRider> {
                       title: townPlaceHolder,
                       choiceType: S2ChoiceType.chips,
                       choiceLayout: S2ChoiceLayout.grid,
-                      value: multi_value,
+                      value: multiValue,
                       choiceItems: divisionValue == 'Yangon'
                           ? ygnTownships
                           : mdyTownships,
                       onChange: (state) =>
-                          setState(() => multi_value = state.value),
+                          setState(() => multiValue = state.value),
                     ),
                   ),
                 SizedBox(
@@ -176,6 +213,33 @@ class _NewRiderState extends State<NewRider> {
                   style: TextStyle(fontSize: 18),
                   textAlign: TextAlign.left,
                 ),
+                SizedBox(
+                  height: 16,
+                ),
+                Wrap(
+                  children: availableShops
+                      .map(
+                        (shop) => Container(
+                          margin: EdgeInsets.only(right: 3),
+                          child: InputChip(
+                              deleteIconColor: Colors.white,
+                              backgroundColor: Colors.red,
+                              padding: EdgeInsets.all(2.0),
+                              label: Text(
+                                shop['shopTitle'],
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              onDeleted: () {
+                                setState(() {
+                                  availableShops.removeWhere((element) =>
+                                      element['shopTitle'] ==
+                                      shop['shopTitle']);
+                                });
+                              }),
+                        ),
+                      )
+                      .toList(),
+                ),
                 BuildTextField(
                   textController: shopNameController,
                   labelText: shopNamePlaceHolder,
@@ -186,8 +250,14 @@ class _NewRiderState extends State<NewRider> {
                   isMaxLine: true,
                 ),
                 ElevatedButton(
-                  style: ElevatedButton.styleFrom(primary: Colors.black),
-                  onPressed: () => {},
+                  style: ElevatedButton.styleFrom(
+                      primary: _buttonDisable ? Colors.grey : Colors.red),
+                  onPressed: () => {
+                    _buttonDisable
+                        ? null
+                        : _addShopToList(
+                            shopNameController.text, aboutShopController.text)
+                  },
                   child: Text(
                     addShopBtnText,
                   ),

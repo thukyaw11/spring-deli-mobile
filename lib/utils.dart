@@ -41,3 +41,8 @@ const String aboutShopPlaceHolder =
     'ဆိုင်အကြောင်း (လူသိများပါက ဆိုင်အကြောင်းမထည့်လည်းရပါသည်)';
 const String addShopBtnText = 'ဆိုင်ထည့်ရန်';
 const String doneBtnText = 'DONE!';
+
+// customer find division
+const String findCustomerDivisionTitleEn = 'Choose your state or division';
+const String findCustomerDivisionTitleMm =
+    'မိမိတိုင်းဒေသကြီး (သို့) ပြည်နယ်ရွေးပါ';
