@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:spring_deli_app/utils.dart';
 import 'package:spring_deli_app/views/about.dart';
 import 'package:spring_deli_app/views/customer/all_riders.dart';
@@ -17,7 +16,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return MaterialApp(
       debugShowCheckedModeBanner: false,
       initialRoute: '/home',
       routes: {

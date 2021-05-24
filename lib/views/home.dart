@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:spring_deli_app/partials/build_button.dart';
 import 'package:spring_deli_app/partials/line.dart';
 import 'package:spring_deli_app/utils.dart';
@@ -45,7 +44,7 @@ class HomePage extends StatelessWidget {
                 ),
                 BuildLine(),
                 InkWell(
-                  onTap: () => Get.toNamed('/about'),
+                  onTap: () => {},
                   child: Text(
                     "Learn more about Spring Delivery",
                     style: TextStyle(

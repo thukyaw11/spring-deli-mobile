@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smart_select/smart_select.dart';
 import 'package:spring_deli_app/utils.dart';
-import 'package:get/get.dart';
 
 class FindDivision extends StatefulWidget {
   @override
@@ -60,8 +59,7 @@ class _FindDivisionState extends State<FindDivision> {
                   style: _buttonDisable
                       ? ElevatedButton.styleFrom(primary: Colors.white)
                       : null,
-                  onPressed: () =>
-                      {_buttonDisable ? null : Get.toNamed('/all_riders')},
+                  onPressed: () => {_buttonDisable ? null : null},
                   child: Text(
                     findRiderBtnText,
                     style: TextStyle(

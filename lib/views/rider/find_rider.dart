@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:spring_deli_app/partials/build_textfield.dart';
 import 'package:spring_deli_app/partials/line.dart';
 import 'package:spring_deli_app/utils.dart';
-import 'package:get/get.dart';
 
 class FindRider extends StatefulWidget {
   @override
@@ -56,20 +56,9 @@ class _FindRiderState extends State<FindRider> {
               SizedBox(
                 height: 20,
               ),
-              TextField(
-                controller: idTextController,
-                cursorColor: Colors.black,
-                decoration: InputDecoration(
-                  labelText: findRiderPlaceHolder,
-                  labelStyle: TextStyle(
-                    color: Colors.black,
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black, width: 1)),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                  ),
-                ),
+              BuildTextField(
+                textController: idTextController,
+                labelText: findRiderPlaceHolder,
               ),
               SizedBox(
                 height: 10,
@@ -97,7 +86,7 @@ class _FindRiderState extends State<FindRider> {
                 ),
               ),
               InkWell(
-                onTap: () => {Get.toNamed('/new_rider')},
+                onTap: () => {},
                 child: Text(
                   newProfile,
                   style: TextStyle(

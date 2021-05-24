@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:spring_deli_app/controllers/rider_controller.dart';
 import 'package:spring_deli_app/partials/line.dart';
-import 'package:get/get.dart';
 import 'package:spring_deli_app/utils.dart';
 
 class AllRiders extends StatefulWidget {
@@ -11,7 +9,6 @@ class AllRiders extends StatefulWidget {
 
 class _AllRidersState extends State<AllRiders> {
   //controllers
-  final RiderController riderController = Get.put(RiderController());
 
   final TextEditingController _filter = new TextEditingController();
   Icon _searchIcon = Icon(Icons.search);
@@ -46,32 +43,27 @@ class _AllRidersState extends State<AllRiders> {
         IconButton(icon: _searchIcon, onPressed: () => {_changeToSearchBar()})
       ]),
       body: SingleChildScrollView(
-        child: Obx(
-          () => Column(
-            children: [
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Total Riders in Yangon : ",
-                    style: TextStyle(fontSize: 20),
-                  ),
-                  Text(
-                    "67 Riders",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
-              BuildLine(),
-              BuildFoodCard(),
-              BuildFoodCard(),
-              BuildFoodCard(),
-              BuildFoodCard(),
-            ],
-          ),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Total Riders in Yangon : ",
+                  style: TextStyle(fontSize: 20),
+                ),
+                Text(
+                  "11 Riders",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+            BuildLine(),
+            // for (var i in riderController.riderList) BuildFoodCard()
+          ],
         ),
       ),
     );
@@ -86,7 +78,7 @@ class BuildFoodCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => {Get.toNamed('/rider_view')},
+      onTap: () => {},
       child: Card(
         elevation: 0,
         child: Column(

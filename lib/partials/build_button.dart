@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get.dart';
 
 class BuildButton extends StatelessWidget {
   final String type;
@@ -22,7 +21,7 @@ class BuildButton extends StatelessWidget {
         margin: EdgeInsets.all(8),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(primary: Colors.white),
-          onPressed: () => {Get.toNamed(routePath)},
+          onPressed: () => {},
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
