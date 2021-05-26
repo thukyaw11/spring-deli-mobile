@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 
 class BuildTextField extends StatelessWidget {
   const BuildTextField(
-      {Key key,
-      @required this.textController,
-      @required this.labelText,
-      this.isMaxLine = false})
-      : super(key: key);
+      {required this.textController,
+      required this.labelText,
+      this.isMaxLine = false});
 
   final TextEditingController textController;
   final String labelText;

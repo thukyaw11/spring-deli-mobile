@@ -12,7 +12,7 @@ class _FindDivisionState extends State<FindDivision> {
     S2Choice<String>(value: 'Yangon', title: 'Yangon'),
     S2Choice<String>(value: 'Mandalay', title: 'Mandalay'),
   ];
-  String divisionValue;
+  String? divisionValue;
   bool _buttonDisable = true;
   @override
   Widget build(BuildContext context) {
@@ -59,7 +59,11 @@ class _FindDivisionState extends State<FindDivision> {
                   style: _buttonDisable
                       ? ElevatedButton.styleFrom(primary: Colors.white)
                       : null,
-                  onPressed: () => {_buttonDisable ? null : null},
+                  onPressed: () => {
+                    _buttonDisable
+                        ? null
+                        : Navigator.of(context).pushNamed('/allRiders')
+                  },
                   child: Text(
                     findRiderBtnText,
                     style: TextStyle(

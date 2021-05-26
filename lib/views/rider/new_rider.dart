@@ -11,7 +11,7 @@ class NewRider extends StatefulWidget {
 }
 
 class _NewRiderState extends State<NewRider> {
-  File _image;
+  File? _image;
   final picker = ImagePicker();
 
   Future getImage() async {
@@ -37,7 +37,7 @@ class _NewRiderState extends State<NewRider> {
   bool _buttonDisable = true;
 
   // division select
-  String divisionValue;
+  String? divisionValue;
   List<S2Choice<String>> options = [
     S2Choice<String>(value: 'Yangon', title: 'Yangon'),
     S2Choice<String>(value: 'Mandalay', title: 'Mandalay'),
@@ -62,7 +62,7 @@ class _NewRiderState extends State<NewRider> {
     {'shopTitle': 'Jo Jo', 'shopDescription': 'this is shop des'},
   ];
 
-  void _addShopToList(String shopTitle, [String shopDescription]) {
+  void _addShopToList(String shopTitle, [String? shopDescription]) {
     setState(() {
       availableShops.add({
         'shopTitle': shopTitle,
@@ -199,7 +199,7 @@ class _NewRiderState extends State<NewRider> {
                   child: _image == null
                       ? Text("No image selected")
                       : Image.file(
-                          _image,
+                          _image!,
                           width: 100,
                           height: 100,
                           fit: BoxFit.fill,
@@ -226,7 +226,7 @@ class _NewRiderState extends State<NewRider> {
                               backgroundColor: Colors.red,
                               padding: EdgeInsets.all(2.0),
                               label: Text(
-                                shop['shopTitle'],
+                                shop['shopTitle']!,
                                 style: TextStyle(color: Colors.white),
                               ),
                               onDeleted: () {

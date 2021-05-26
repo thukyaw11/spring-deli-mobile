@@ -145,10 +145,6 @@ class _RiderViewState extends State<RiderView> {
 }
 
 class BuildRiderAvCard extends StatelessWidget {
-  const BuildRiderAvCard({
-    Key key,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Container(

@@ -33,18 +33,18 @@ class HomePage extends StatelessWidget {
                     BuildButton(
                       type: 'rider',
                       svgPath: 'svgs/rider.svg',
-                      routePath: '/find_rider',
+                      routePath: '/findRider',
                     ),
                     BuildButton(
                       type: 'customer',
                       svgPath: 'svgs/customer.svg',
-                      routePath: '/find_division',
+                      routePath: '/customerFindRider',
                     ),
                   ],
                 ),
                 BuildLine(),
                 InkWell(
-                  onTap: () => {},
+                  onTap: () => {Navigator.of(context).pushNamed('/about')},
                   child: Text(
                     "Learn more about Spring Delivery",
                     style: TextStyle(

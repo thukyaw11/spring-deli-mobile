@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
+import 'package:spring_deli_app/blocs/riders/riders_bloc.dart';
+import 'package:spring_deli_app/router.dart';
+import 'package:spring_deli_app/services/api/api_service.dart';
 import 'package:spring_deli_app/utils.dart';
-import 'package:spring_deli_app/views/about.dart';
-import 'package:spring_deli_app/views/customer/all_riders.dart';
-import 'package:spring_deli_app/views/customer/customer_find_division.dart';
-import 'package:spring_deli_app/views/customer/rider_view.dart';
 import 'package:spring_deli_app/views/home.dart';
-import 'package:spring_deli_app/views/rider/find_rider.dart';
-import 'package:spring_deli_app/views/rider/new_rider.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,24 +15,28 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      initialRoute: '/home',
-      routes: {
-        '/home': (context) => HomePage(),
-        '/about': (context) => About(),
-        '/find_rider': (context) => FindRider(),
-        '/new_rider': (context) => NewRider(),
-        '/find_division': (context) => FindDivision(),
-        '/all_riders': (context) => AllRiders(),
-        '/rider_view': (context) => RiderView()
-      },
-      title: appTitle,
-      theme: ThemeData(
-        fontFamily: 'Baloo',
-        primarySwatch: Colors.red,
-      ),
-      home: HomePage(),
-    );
+    return MultiProvider(
+        providers: [
+          Provider<ApiService>(create: (context) => ApiService.create())
+        ],
+        child: Consumer<ApiService>(builder: (context, apiService, child) {
+          return MultiBlocProvider(
+            providers: [
+              BlocProvider<RidersBloc>(
+                  create: (context) => RidersBloc(api: apiService)),
+            ],
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              initialRoute: '/',
+              onGenerateRoute: RouteGenerator.generateRoute,
+              title: appTitle,
+              theme: ThemeData(
+                fontFamily: 'Baloo',
+                primarySwatch: Colors.red,
+              ),
+              home: HomePage(),
+            ),
+          );
+        }));
   }
 }

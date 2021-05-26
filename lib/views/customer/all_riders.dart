@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:spring_deli_app/blocs/riders/riders_bloc.dart';
 import 'package:spring_deli_app/partials/line.dart';
 import 'package:spring_deli_app/utils.dart';
 
@@ -9,7 +11,6 @@ class AllRiders extends StatefulWidget {
 
 class _AllRidersState extends State<AllRiders> {
   //controllers
-
   final TextEditingController _filter = new TextEditingController();
   Icon _searchIcon = Icon(Icons.search);
   Widget _appBarTitle = new Text('All Riders');
@@ -37,6 +38,9 @@ class _AllRidersState extends State<AllRiders> {
 
   @override
   Widget build(BuildContext context) {
+    final ridersBloc = BlocProvider.of<RidersBloc>(context);
+    ridersBloc..add(FetchRiderEvent());
+
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(title: _appBarTitle, actions: [
@@ -62,7 +66,45 @@ class _AllRidersState extends State<AllRiders> {
               ],
             ),
             BuildLine(),
-            // for (var i in riderController.riderList) BuildFoodCard()
+            BlocBuilder<RidersBloc, RidersState>(
+              builder: (context, state) {
+                if (state is RidersLoadingState || state is RidersInitial) {
+                  return Center(
+                    child: CircularProgressIndicator(
+                        backgroundColor: backgroundColor,
+                        valueColor: new AlwaysStoppedAnimation<Color>(
+                            Theme.of(context).primaryColor)),
+                  );
+                }
+
+                if (state is RidersErrorState) {
+                  return Center(
+                    child: Text(
+                      "Something went wrong!",
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  );
+                }
+
+                if (state is RidersLoadedState) {
+                  return SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
+                    child: Column(
+                      children: state.ridersModel.data
+                          .map((e) => BuildFoodCard())
+                          .toList(),
+                    ),
+                  );
+                }
+
+                return Center(
+                  child: CircularProgressIndicator(
+                      backgroundColor: backgroundColor,
+                      valueColor:
+                          new AlwaysStoppedAnimation<Color>(Colors.blue)),
+                );
+              },
+            )
           ],
         ),
       ),
@@ -71,10 +113,6 @@ class _AllRidersState extends State<AllRiders> {
 }
 
 class BuildFoodCard extends StatelessWidget {
-  const BuildFoodCard({
-    Key key,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return InkWell(

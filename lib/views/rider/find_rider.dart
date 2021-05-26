@@ -86,7 +86,7 @@ class _FindRiderState extends State<FindRider> {
                 ),
               ),
               InkWell(
-                onTap: () => {},
+                onTap: () => {Navigator.of(context).pushNamed('/newRider')},
                 child: Text(
                   newProfile,
                   style: TextStyle(

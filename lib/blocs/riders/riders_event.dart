@@ -6,3 +6,5 @@ abstract class RidersEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class FetchRiderEvent extends RidersEvent {}

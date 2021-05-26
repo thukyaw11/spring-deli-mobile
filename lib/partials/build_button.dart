@@ -6,11 +6,7 @@ class BuildButton extends StatelessWidget {
   final String svgPath;
   final String routePath;
   BuildButton(
-      {Key key,
-      @required this.type,
-      @required this.svgPath,
-      @required this.routePath})
-      : super(key: key);
+      {required this.type, required this.svgPath, required this.routePath});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +17,7 @@ class BuildButton extends StatelessWidget {
         margin: EdgeInsets.all(8),
         child: ElevatedButton(
           style: ElevatedButton.styleFrom(primary: Colors.white),
-          onPressed: () => {},
+          onPressed: () => {Navigator.of(context).pushNamed(routePath)},
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
