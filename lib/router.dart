@@ -19,7 +19,10 @@ class RouteGenerator {
       case '/about':
         return CupertinoPageRoute(builder: (_) => About());
       case '/allRiders':
-        return CupertinoPageRoute(builder: (_) => AllRiders());
+        return CupertinoPageRoute(
+            builder: (_) => AllRiders(
+                  selectedTownship: arguments.toString(),
+                ));
       case '/customerFindRider':
         return CupertinoPageRoute(builder: (_) => FindDivision());
       case '/riderView':

@@ -62,7 +62,8 @@ class _FindDivisionState extends State<FindDivision> {
                   onPressed: () => {
                     _buttonDisable
                         ? null
-                        : Navigator.of(context).pushNamed('/allRiders')
+                        : Navigator.of(context)
+                            .pushNamed('/allRiders', arguments: divisionValue)
                   },
                   child: Text(
                     findRiderBtnText,

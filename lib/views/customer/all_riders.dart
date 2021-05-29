@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spring_deli_app/blocs/riders/riders_bloc.dart';
+import 'package:spring_deli_app/models/rider/riders_model.dart';
 import 'package:spring_deli_app/partials/line.dart';
 import 'package:spring_deli_app/utils.dart';
 
 class AllRiders extends StatefulWidget {
+  String? selectedTownship;
+  AllRiders({required this.selectedTownship});
   @override
   _AllRidersState createState() => _AllRidersState();
 }
@@ -46,73 +49,82 @@ class _AllRidersState extends State<AllRiders> {
       appBar: AppBar(title: _appBarTitle, actions: [
         IconButton(icon: _searchIcon, onPressed: () => {_changeToSearchBar()})
       ]),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 20,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Total Riders in Yangon : ",
-                  style: TextStyle(fontSize: 20),
-                ),
-                Text(
-                  "11 Riders",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                )
-              ],
-            ),
-            BuildLine(),
-            BlocBuilder<RidersBloc, RidersState>(
-              builder: (context, state) {
-                if (state is RidersLoadingState || state is RidersInitial) {
-                  return Center(
+      body: ListView(
+        children: [
+          BlocBuilder<RidersBloc, RidersState>(
+            builder: (context, state) {
+              if (state is RidersLoadingState || state is RidersInitial) {
+                return Padding(
+                  padding: const EdgeInsets.only(top: 30),
+                  child: Center(
                     child: CircularProgressIndicator(
                         backgroundColor: backgroundColor,
                         valueColor: new AlwaysStoppedAnimation<Color>(
                             Theme.of(context).primaryColor)),
-                  );
-                }
+                  ),
+                );
+              }
 
-                if (state is RidersErrorState) {
-                  return Center(
-                    child: Text(
-                      "Something went wrong!",
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  );
-                }
-
-                if (state is RidersLoadedState) {
-                  return SingleChildScrollView(
-                    physics: BouncingScrollPhysics(),
-                    child: Column(
-                      children: state.ridersModel.data
-                          .map((e) => BuildFoodCard())
-                          .toList(),
-                    ),
-                  );
-                }
-
+              if (state is RidersErrorState) {
                 return Center(
+                  child: Text(
+                    "Something went wrong!",
+                    style: TextStyle(color: Colors.red),
+                  ),
+                );
+              }
+
+              if (state is RidersLoadedState) {
+                return Column(
+                  children: [
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Total Riders : ",
+                          style: TextStyle(fontSize: 20),
+                        ),
+                        Text(
+                          state.ridersModel.data.length.toString(),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
+                        )
+                      ],
+                    ),
+                    BuildLine(),
+                    Column(children: [
+                      for (var item in state.ridersModel.data)
+                        if (item.state == widget.selectedTownship) ...[
+                          BuildFoodCard(riderModel: item)
+                        ]
+                    ])
+                  ],
+                );
+              }
+
+              return Padding(
+                padding: const EdgeInsets.only(top: 30),
+                child: Center(
                   child: CircularProgressIndicator(
                       backgroundColor: backgroundColor,
-                      valueColor:
-                          new AlwaysStoppedAnimation<Color>(Colors.blue)),
-                );
-              },
-            )
-          ],
-        ),
+                      valueColor: new AlwaysStoppedAnimation<Color>(
+                          Theme.of(context).primaryColor)),
+                ),
+              );
+            },
+          )
+        ],
       ),
     );
   }
 }
 
 class BuildFoodCard extends StatelessWidget {
+  RiderModel riderModel;
+  BuildFoodCard({required this.riderModel});
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -131,73 +143,51 @@ class BuildFoodCard extends StatelessWidget {
                     print("hello");
                   }),
               title: Text(
-                'Kyaw Gyi',
+                "${riderModel.name}",
                 style: TextStyle(fontSize: 19),
               ),
-              subtitle: Text('0986868686'),
+              subtitle: Text('${riderModel.phoneNumber}'),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 13),
               child: Wrap(children: [
-                Container(
-                  margin: EdgeInsets.only(right: 10),
-                  child: Chip(
-                    backgroundColor: Colors.red,
-                    padding: EdgeInsets.all(2.0),
-                    label: Text(
-                      'Kamaryut(ကမာရွတ်)',
-                      style: TextStyle(color: Colors.white),
+                for (var township in riderModel.township.take(3))
+                  Container(
+                    margin: EdgeInsets.only(right: 10),
+                    child: Chip(
+                      backgroundColor: Colors.red,
+                      padding: EdgeInsets.all(2.0),
+                      label: Text(
+                        township,
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(right: 10),
-                  child: Chip(
-                    backgroundColor: Colors.red,
-                    padding: EdgeInsets.all(2.0),
-                    label: Text(
-                      'Hlaing(လှိုင်)',
-                      style: TextStyle(color: Colors.white),
+                if (riderModel.township.length > 3)
+                  Container(
+                    margin: EdgeInsets.only(right: 10),
+                    child: Chip(
+                      backgroundColor: Colors.transparent,
+                      shape: StadiumBorder(side: BorderSide(color: Colors.red)),
+                      padding: EdgeInsets.all(2.0),
+                      label: Text(
+                        '${riderModel.township.length - 3} more',
+                        style: TextStyle(color: Colors.red),
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(right: 10),
-                  child: Chip(
-                    backgroundColor: Colors.red,
-                    padding: EdgeInsets.all(2.0),
-                    label: Text(
-                      'Insein(အင်းစိန်)',
-                      style: TextStyle(color: Colors.white),
+                for (var shop in riderModel.availableShops.take(2))
+                  ListTile(
+                    leading: Icon(
+                      Icons.fastfood,
                     ),
+                    title: Text("${shop.name}"),
                   ),
-                ),
-                Container(
-                  margin: EdgeInsets.only(right: 10),
-                  child: Chip(
-                    backgroundColor: Colors.transparent,
-                    shape: StadiumBorder(side: BorderSide(color: Colors.red)),
-                    padding: EdgeInsets.all(2.0),
-                    label: Text(
-                      '3 more',
-                      style: TextStyle(color: Colors.red),
-                    ),
+                if (riderModel.availableShops.length > 2)
+                  ListTile(
+                    leading: Icon(Icons.add),
+                    title: Text("${riderModel.availableShops.length - 2} more"),
                   ),
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.fastfood,
-                  ),
-                  title: Text("KFC"),
-                ),
-                ListTile(
-                  leading: Icon(Icons.fastfood),
-                  title: Text("LOTTERIA"),
-                ),
-                ListTile(
-                  leading: Icon(Icons.add),
-                  title: Text("2 more"),
-                ),
               ]),
             )
           ],
