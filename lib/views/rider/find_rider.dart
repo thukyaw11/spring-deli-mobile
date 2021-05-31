@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:spring_deli_app/blocs/find_single_rider/find_single_rider_bloc.dart';
 import 'package:spring_deli_app/partials/build_textfield.dart';
 import 'package:spring_deli_app/partials/line.dart';
 import 'package:spring_deli_app/utils.dart';
@@ -38,6 +40,8 @@ class _FindRiderState extends State<FindRider> {
 
   @override
   Widget build(BuildContext context) {
+    final ridersBloc = BlocProvider.of<FindSingleRiderBloc>(context);
+
     return Scaffold(
       backgroundColor: backgroundColor,
       body: SafeArea(
@@ -69,7 +73,8 @@ class _FindRiderState extends State<FindRider> {
                   style: _buttonDisable
                       ? ElevatedButton.styleFrom(primary: Colors.white)
                       : null,
-                  onPressed: () => {},
+                  onPressed: () =>
+                      {ridersBloc.add(FindSingleRiderFetchEvent())},
                   child: Text(
                     findRiderBtnText,
                     style: TextStyle(

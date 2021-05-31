@@ -7,4 +7,7 @@ abstract class RidersEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class FetchRiderEvent extends RidersEvent {}
+class FetchRiderEvent extends RidersEvent {
+  final String statePath;
+  FetchRiderEvent({required this.statePath});
+}

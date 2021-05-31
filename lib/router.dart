@@ -25,8 +25,6 @@ class RouteGenerator {
                 ));
       case '/customerFindRider':
         return CupertinoPageRoute(builder: (_) => FindDivision());
-      case '/riderView':
-        return CupertinoPageRoute(builder: (_) => RiderView());
       default:
         return _errorRoute();
     }

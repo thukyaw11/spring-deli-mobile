@@ -13,6 +13,9 @@ abstract class ApiService {
     return ApiService(dio);
   }
 
-  @GET('riders')
-  Future<RidersModel> getRidersList();
+  @GET('riders/{param}')
+  Future<RidersModel> getRidersList(@Path() String param);
+
+  @GET('rider/{uniqueId}')
+  Future<RiderModel> getRiderByUniqueId(@Path() String uniqueId);
 }

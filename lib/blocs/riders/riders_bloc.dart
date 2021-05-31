@@ -21,7 +21,8 @@ class RidersBloc extends Bloc<RidersEvent, RidersState> {
     if (event is FetchRiderEvent) {
       yield RidersLoadingState();
       try {
-        final response = await api.getRidersList();
+        final response = await api.getRidersList(event.statePath);
+        print(event.statePath);
         yield RidersLoadedState(ridersModel: response);
       } on Exception {
         yield RidersErrorState();

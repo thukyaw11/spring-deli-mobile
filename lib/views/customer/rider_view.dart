@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:spring_deli_app/models/rider/riders_model.dart';
 import 'package:spring_deli_app/partials/line.dart';
 import 'package:spring_deli_app/utils.dart';
 
 class RiderView extends StatefulWidget {
+  final RiderModel riderModel;
+  RiderView({required this.riderModel});
+
   @override
   _RiderViewState createState() => _RiderViewState();
 }
@@ -27,11 +31,11 @@ class _RiderViewState extends State<RiderView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "Kyaw Gyi",
+                            "${widget.riderModel.name}",
                             style: TextStyle(fontSize: 25),
                           ),
                           Text(
-                            "098787878",
+                            widget.riderModel.phoneNumber,
                             style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
@@ -52,8 +56,7 @@ class _RiderViewState extends State<RiderView> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                      "သင်္ဃန်းကျွန်း နဲ့ တောင်ဥက္ကလာအတွင်းမှာရှိတဲ့ 🍔🍗 မုန့်ဆိုင်တေ 🏢🏢 G&G၊ City Martတို့က လိုအပ်တဲ့ပစ္စည်းလေးတေ၊ 🛵🛵 ပို့ဆောင်ချင်တဲ့ပစ္စည်းလေးတေ 🕺🕺 အကုန်အဆင်ပြေအောင်ဝန်ဆောင်မှုပေးပါတယ်ခင်ဗျ 📱📱 လိုအပ်တာရှိရင် Message ပို့ပီးမှာနိုင်ပါတယ်"),
+                  child: Text("${widget.riderModel.detail}"),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -69,7 +72,7 @@ class _RiderViewState extends State<RiderView> {
                                   fontSize: 20, fontWeight: FontWeight.bold),
                             ),
                             Text(
-                              "1500 ks",
+                              "${widget.riderModel.expectedMoney} ks",
                               style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -92,49 +95,19 @@ class _RiderViewState extends State<RiderView> {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 Wrap(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(right: 10),
-                      child: Chip(
-                        backgroundColor: Colors.red,
-                        padding: EdgeInsets.all(2.0),
-                        label: Text(
-                          'Insein(အင်းစိန်)',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(right: 10),
-                      child: Chip(
-                        backgroundColor: Colors.red,
-                        padding: EdgeInsets.all(2.0),
-                        label: Text(
-                          'Insein(အင်းစိန်)',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.only(right: 10),
-                      child: Chip(
-                        backgroundColor: Colors.red,
-                        padding: EdgeInsets.all(2.0),
-                        label: Text(
-                          'Insein(အင်းစိန်)',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                    children: widget.riderModel.township
+                        .map((townshipNmae) => BuildTownshipChip(
+                              township: townshipNmae,
+                            ))
+                        .toList()),
                 BuildLine(),
-                BuildRiderAvCard(),
-                BuildRiderAvCard(),
-                BuildRiderAvCard(),
-                BuildRiderAvCard(),
-                BuildRiderAvCard(),
-                BuildRiderAvCard(),
+                Column(
+                  children: widget.riderModel.availableShops
+                      .map((shop) => BuildRiderAvCard(
+                            availableShopsModel: shop,
+                          ))
+                      .toList(),
+                )
               ],
             ),
           ),
@@ -144,7 +117,30 @@ class _RiderViewState extends State<RiderView> {
   }
 }
 
+class BuildTownshipChip extends StatelessWidget {
+  final String township;
+
+  BuildTownshipChip({required this.township});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(right: 10),
+      child: Chip(
+        backgroundColor: Colors.red,
+        padding: EdgeInsets.all(2.0),
+        label: Text(
+          township,
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+    );
+  }
+}
+
 class BuildRiderAvCard extends StatelessWidget {
+  final AvailableShopsModel availableShopsModel;
+  BuildRiderAvCard({required this.availableShopsModel});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -157,11 +153,11 @@ class BuildRiderAvCard extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  'All shop from Thingangyun & South Okkalapa',
+                  availableShopsModel.name,
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  'အစားအစာနှင့် ဆေးဝါး လိုအပ်တဲ့ပစ္စည်းများဝယ်ပေးပါတယ် Online shopနှင့် ပို့ချင်တဲ့ ပစ္စည်းလေးတေပို့ပေးပါတယ်ခင်ဗျ',
+                  availableShopsModel.detail,
                   style: TextStyle(fontSize: 15, color: Colors.black45),
                 ),
               ],

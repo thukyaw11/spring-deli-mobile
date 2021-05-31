@@ -1,12 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spring_deli_app/blocs/riders/riders_bloc.dart';
 import 'package:spring_deli_app/models/rider/riders_model.dart';
 import 'package:spring_deli_app/partials/line.dart';
 import 'package:spring_deli_app/utils.dart';
+import 'package:spring_deli_app/views/customer/rider_view.dart';
 
 class AllRiders extends StatefulWidget {
-  String? selectedTownship;
+  final String selectedTownship;
   AllRiders({required this.selectedTownship});
   @override
   _AllRidersState createState() => _AllRidersState();
@@ -42,7 +44,7 @@ class _AllRidersState extends State<AllRiders> {
   @override
   Widget build(BuildContext context) {
     final ridersBloc = BlocProvider.of<RidersBloc>(context);
-    ridersBloc..add(FetchRiderEvent());
+    ridersBloc..add(FetchRiderEvent(statePath: widget.selectedTownship));
 
     return Scaffold(
       backgroundColor: backgroundColor,
@@ -84,7 +86,7 @@ class _AllRidersState extends State<AllRiders> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Total Riders : ",
+                          "Total Riders ${widget.selectedTownship} : ",
                           style: TextStyle(fontSize: 20),
                         ),
                         Text(
@@ -128,7 +130,14 @@ class BuildFoodCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => {},
+      onTap: () => {
+        Navigator.push(
+          context,
+          CupertinoPageRoute(
+            builder: (_) => RiderView(riderModel: riderModel),
+          ),
+        ),
+      },
       child: Card(
         elevation: 0,
         child: Column(
